@@ -1,4 +1,4 @@
-# TheAmazingSnekGame
+# The Amazing Snek Game
 A C++ snake game 2-player functionality built utilizing the Chili Direct X Framework
 
 Game logic itself and visuals by me while the Engine was made by ChiliTomatoNoodle http://www.planetchili.net/
@@ -23,4 +23,4 @@ TODO(Future Feature Ideas)
 ==================================
 *Add a clickable menu at the start screen to select single or 2-player...... when I learn how to do that.
 
-*Oh you thought the obstacles were bad now? Well the next I'll add LASERS to target players who survive long enough.
+*Oh you thought the obstacles were bad now? Well the next I'll add LASERS to target players who survive long enough!
