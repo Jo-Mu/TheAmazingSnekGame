@@ -1,5 +1,10 @@
 #include "Obstacles.h"
 
+void Obstacles::EnemyBlocks::Activate()
+{
+	isActive = true;
+}
+
 void Obstacles::EnemyBlocks::SetDeltaVelocity(int xv, int yv)
 {
 	xVelocity = xv;
@@ -46,6 +51,12 @@ void Obstacles::EnemyBlocks::Draw(Board & brd) const
 	brd.DrawCell(loc, blockColor);
 }
 
+
+bool Obstacles::EnemyBlocks::GetIsActive() const
+{
+	return isActive;
+}
+
 bool Obstacles::AllBlocksActive()
 {
 	for(int i = 0; i < maxEnemyBlocks; i++)
@@ -59,16 +70,20 @@ bool Obstacles::AllBlocksActive()
 	return true;
 }
 
-void Obstacles::MoveBlocks(const Board & brd)
+void Obstacles::MoveBlocks(Board& brd)
 {
 	for (int i = 0; i < maxEnemyBlocks; i++) 
 	{
+		brd.LeaveObstacleSpace(enemyBlocks[i].loc);
+
 		enemyBlocks[i].Move();
 		enemyBlocks[i].BorderClamp(brd);
+
+		brd.OccupyObstacleSpace(enemyBlocks[i].loc);
 	}
 }
 
-void Obstacles::SpawnBlock(std::mt19937& rng, const Board& brd, const Snake& snek, const ActiveBlock& goal)
+void Obstacles::SpawnBlock(std::mt19937& rng, Board& brd, const Snake& snek, const Goal& goal)
 {
 	if (nEnemyBlocks < maxEnemyBlocks)
 	{
@@ -82,13 +97,14 @@ void Obstacles::SpawnBlock(std::mt19937& rng, const Board& brd, const Snake& sne
 		{
 			newLoc.x = xDist(rng);
 			newLoc.y = yDist(rng);
-		} while (snek.IsInTile(newLoc) || goal.IsInTile(newLoc) || IsInTile(newLoc));
+		} while (snek.IsInTile(newLoc) || goal.IsInTile(newLoc) || brd.GetIsObstacleThere(newLoc));
 
 		enemyBlocks[nEnemyBlocks - 1].loc = newLoc;
+		brd.OccupyObstacleSpace(newLoc);
 	}
 }
 
-void Obstacles::SpawnBlock(std::mt19937& rng, const Board& brd, const Snake& sneker1, const Snake& sneker2, const ActiveBlock& goal)
+void Obstacles::SpawnBlock(std::mt19937& rng, Board& brd, const Snake& sneker1, const Snake& sneker2, const Goal& goal)
 {
 	if (nEnemyBlocks < maxEnemyBlocks)
 	{
@@ -102,22 +118,11 @@ void Obstacles::SpawnBlock(std::mt19937& rng, const Board& brd, const Snake& sne
 		{
 			newLoc.x = xDist(rng);
 			newLoc.y = yDist(rng);
-		} while (sneker1.IsInTile(newLoc) || sneker2.IsInTile(newLoc) || goal.IsInTile(newLoc) || IsInTile(newLoc));
+		} while (sneker1.IsInTile(newLoc) || sneker2.IsInTile(newLoc) || goal.IsInTile(newLoc) || brd.GetIsObstacleThere(newLoc));
 
 		enemyBlocks[nEnemyBlocks - 1].loc = newLoc;
+		brd.OccupyObstacleSpace(newLoc);
 	}
-}
-
-bool Obstacles::IsInTile(const Location & target) const
-{
-	for(int i = 0; i < nEnemyBlocks; i++)
-	{
-		if(enemyBlocks[i].IsInTile(target))
-		{
-			return true;
-		}
-	}
-	return false;
 }
 
 void Obstacles::Draw(Board & brd)
@@ -138,6 +143,7 @@ void Obstacles::TriggerCrissCrossMovement()
 		if((i + 1) % 2 == 0)
 		{
 			yVelocitySwitch = !yVelocitySwitch;
+
 			if (yVelocitySwitch)
 			{
 				enemyBlocks[i].SetDeltaVelocity(0, 1);
@@ -150,6 +156,7 @@ void Obstacles::TriggerCrissCrossMovement()
 		else
 		{
 			xVelocitySwitch = !xVelocitySwitch;
+
 			if (xVelocitySwitch)
 			{
 				enemyBlocks[i].SetDeltaVelocity(1, 0);

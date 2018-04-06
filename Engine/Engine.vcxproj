@@ -146,7 +146,6 @@
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="FrameTimer.h" />
     <ClInclude Include="Obstacles.h" />
-    <ClInclude Include="ActiveBlock.h" />
     <ClInclude Include="Snake.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Location.h" />
@@ -156,7 +155,6 @@
     <ClInclude Include="SpriteCodex.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ActiveBlock.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="DXErr.cpp" />
     <ClCompile Include="FrameTimer.cpp" />

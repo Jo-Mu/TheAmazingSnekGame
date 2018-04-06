@@ -29,7 +29,7 @@ Game::Game(MainWindow& wnd)
 	rng(std::random_device()()),
 	sneker1({ 2, 2 }, 1),
 	sneker2({brd.GetWidth() - 2, brd.GetHeight() - 2}, 2),
-	goal(rng, brd, sneker1, sneker2, obstacles)
+	goal(rng, brd, sneker1, sneker2)
 {
 }
 
@@ -111,9 +111,9 @@ void Game::PlaySinglePlayerGame(const float frameTime)
 		{
 			snekMoveTimer -= snekMovePeriod;
 			Location next = sneker1.GetNextLocation(delta_loc1);
-			const bool eating = next == goal.loc;
+			const bool eating = next == goal.GetLocation();
 
-			if (!brd.IsInsideBoard(next) || sneker1.IsInTileExceptEnd(next) || obstacles.IsInTile(next))
+			if (!brd.IsInsideBoard(next) || sneker1.IsInTileExceptEnd(next) || brd.GetIsObstacleThere(next))
 			{
 				player1GameOver = true;
 			}
@@ -123,7 +123,7 @@ void Game::PlaySinglePlayerGame(const float frameTime)
 				if (eating)
 				{
 					sneker1.Grow();
-					goal.Respawn(rng, brd, sneker1, obstacles);
+					goal.Respawn(rng, brd, sneker1);
 				}
 
 				sneker1.MoveBy(delta_loc1);
@@ -156,7 +156,6 @@ void Game::DrawSinglePlayerGame()
 {
 	if (!player1GameOver)
 	{
-		int starting = 100;
 		for (int x = 0; x < brd.GetWidth(); x++)
 		{
 			for (int y = 0; y < brd.GetHeight(); y++)
@@ -212,15 +211,15 @@ void Game::PlayMultiplayerGame(const float frameTime)
 			snekMoveTimer -= snekMovePeriod;
 			Location next1 = sneker1.GetNextLocation(delta_loc1);
 			Location next2 = sneker2.GetNextLocation(delta_loc2);
-			const bool eating1 = next1 == goal.loc;
-			const bool eating2 = next2 == goal.loc;
+			const bool eating1 = next1 == goal.GetLocation();
+			const bool eating2 = next2 == goal.GetLocation();
 
-			if (!brd.IsInsideBoard(next1) || sneker1.IsInTileExceptEnd(next1) || obstacles.IsInTile(next1) || sneker2.PlayerCollisionExceptHeadAndEnd(next1))
+			if (!brd.IsInsideBoard(next1) || sneker1.IsInTileExceptEnd(next1) || brd.GetIsObstacleThere(next1) || sneker2.PlayerCollisionExceptHeadAndEnd(next1))
 			{
 				player1GameOver = true;
 			}
 
-			if (!brd.IsInsideBoard(next2) || sneker1.IsInTileExceptEnd(next2) || obstacles.IsInTile(next2) || sneker1.PlayerCollisionExceptHeadAndEnd(next2))
+			if (!brd.IsInsideBoard(next2) || sneker1.IsInTileExceptEnd(next2) || brd.GetIsObstacleThere(next1) || sneker1.PlayerCollisionExceptHeadAndEnd(next2))
 			{
 				player2GameOver = true;
 			}
@@ -245,13 +244,13 @@ void Game::PlayMultiplayerGame(const float frameTime)
 				if (eating1)
 				{
 					sneker1.Grow();
-					goal.Respawn(rng, brd, sneker1, sneker2, obstacles);
+					goal.Respawn(rng, brd, sneker1, sneker2);
 				}
 
 				if (eating2)
 				{
 					sneker2.Grow();
-					goal.Respawn(rng, brd, sneker1, sneker2, obstacles);
+					goal.Respawn(rng, brd, sneker1, sneker2);
 				}
 
 				sneker1.MoveBy(delta_loc1);
@@ -286,7 +285,6 @@ void Game::DrawMultiplayerGame()
 {
 	if (!player1GameOver && !player2GameOver)
 	{
-		int starting = 100;
 		for (int x = 0; x < brd.GetWidth(); x++)
 		{
 			for (int y = 0; y < brd.GetHeight(); y++)
