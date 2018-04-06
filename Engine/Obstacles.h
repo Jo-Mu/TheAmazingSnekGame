@@ -37,7 +37,7 @@ public:
 	bool AllBlocksActive();
 	void MoveBlocks(Board& brd);
 private:
-	static const int maxEnemyBlocks = 10;
+	static const int maxEnemyBlocks = 12;
 	EnemyBlocks enemyBlocks[maxEnemyBlocks];
 	int nEnemyBlocks = 0;
 	Color blockColor = Colors::Gray;
