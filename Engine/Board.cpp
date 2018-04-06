@@ -5,6 +5,13 @@ Board::Board(Graphics& in_gfx)
 	:
 	gfx(in_gfx)
 {
+	for (int x = 0; x < width; x++)
+	{
+		for (int y = 0; y < height; y++)
+		{
+			isObstacleThere[x][y] = false;
+		}
+	}
 }
 
 void Board::DrawCell(const Location & loc, const Color c) const
@@ -56,4 +63,19 @@ bool Board::IsInsideBoard(const Location & loc) const
 		loc.x < width &&
 		loc.y >= 0 &&
 		loc.y < height;
+}
+
+bool Board::GetIsObstacleThere(const Location & loc) const
+{
+	return isObstacleThere[loc.x][loc.y];
+}
+
+void Board::OccupyObstacleSpace(const Location & loc)
+{
+	isObstacleThere[loc.x][loc.y] = true;
+}
+
+void Board::LeaveObstacleSpace(const Location & loc)
+{
+	isObstacleThere[loc.x][loc.y] = false;
 }

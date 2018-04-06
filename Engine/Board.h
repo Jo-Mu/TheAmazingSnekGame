@@ -12,6 +12,9 @@ public:
 	int GetWidth() const;
 	int GetHeight() const;
 	bool IsInsideBoard(const Location& loc) const;
+	bool GetIsObstacleThere(const Location& loc) const;
+	void OccupyObstacleSpace(const Location& loc);
+	void LeaveObstacleSpace(const Location& loc);
 private:
 	static constexpr int cellDimensions = 15;
 	static constexpr int x_offset = 20;
@@ -19,5 +22,6 @@ private:
 	static constexpr int width = 50;
 	static constexpr int height = 37;
 	static constexpr int borderPadding = 5;
+	bool isObstacleThere[width][height];
 	Graphics& gfx;
 };
