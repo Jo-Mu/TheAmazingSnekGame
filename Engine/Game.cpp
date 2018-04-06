@@ -111,7 +111,7 @@ void Game::PlaySinglePlayerGame(const float frameTime)
 		{
 			snekMoveTimer -= snekMovePeriod;
 			Location next = sneker1.GetNextLocation(delta_loc1);
-			const bool eating = next == goal.GetLocation();
+			const bool eating = next == goal.loc;
 
 			if (!brd.IsInsideBoard(next) || sneker1.IsInTileExceptEnd(next) || obstacles.IsInTile(next))
 			{
@@ -212,8 +212,8 @@ void Game::PlayMultiplayerGame(const float frameTime)
 			snekMoveTimer -= snekMovePeriod;
 			Location next1 = sneker1.GetNextLocation(delta_loc1);
 			Location next2 = sneker2.GetNextLocation(delta_loc2);
-			const bool eating1 = next1 == goal.GetLocation();
-			const bool eating2 = next2 == goal.GetLocation();
+			const bool eating1 = next1 == goal.loc;
+			const bool eating2 = next2 == goal.loc;
 
 			if (!brd.IsInsideBoard(next1) || sneker1.IsInTileExceptEnd(next1) || obstacles.IsInTile(next1) || sneker2.PlayerCollisionExceptHeadAndEnd(next1))
 			{

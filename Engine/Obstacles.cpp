@@ -1,15 +1,4 @@
 #include "Obstacles.h"
-#include "Goal.h"
-
-void Obstacles::EnemyBlocks::Activate()
-{
-	isActive = true;
-}
-
-bool Obstacles::EnemyBlocks::GetIsActive() const
-{
-	return isActive;
-}
 
 void Obstacles::EnemyBlocks::SetDeltaVelocity(int xv, int yv)
 {
@@ -57,11 +46,6 @@ void Obstacles::EnemyBlocks::Draw(Board & brd) const
 	brd.DrawCell(loc, blockColor);
 }
 
-bool Obstacles::EnemyBlocks::IsInTile(const Location & target) const
-{
-	return loc == target;
-}
-
 bool Obstacles::AllBlocksActive()
 {
 	for(int i = 0; i < maxEnemyBlocks; i++)
@@ -84,7 +68,7 @@ void Obstacles::MoveBlocks(const Board & brd)
 	}
 }
 
-void Obstacles::SpawnBlock(std::mt19937& rng, const Board& brd, const Snake& snek, const Goal& goal)
+void Obstacles::SpawnBlock(std::mt19937& rng, const Board& brd, const Snake& snek, const ActiveBlock& goal)
 {
 	if (nEnemyBlocks < maxEnemyBlocks)
 	{
@@ -104,7 +88,7 @@ void Obstacles::SpawnBlock(std::mt19937& rng, const Board& brd, const Snake& sne
 	}
 }
 
-void Obstacles::SpawnBlock(std::mt19937& rng, const Board& brd, const Snake& sneker1, const Snake& sneker2, const Goal& goal)
+void Obstacles::SpawnBlock(std::mt19937& rng, const Board& brd, const Snake& sneker1, const Snake& sneker2, const ActiveBlock& goal)
 {
 	if (nEnemyBlocks < maxEnemyBlocks)
 	{
@@ -128,10 +112,10 @@ bool Obstacles::IsInTile(const Location & target) const
 {
 	for(int i = 0; i < nEnemyBlocks; i++)
 	{
-			if(enemyBlocks[i].IsInTile(target))
-			{
-				return true;
-			}
+		if(enemyBlocks[i].IsInTile(target))
+		{
+			return true;
+		}
 	}
 	return false;
 }
