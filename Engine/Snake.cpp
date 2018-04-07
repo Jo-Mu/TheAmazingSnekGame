@@ -119,6 +119,11 @@ int Snake::HeadOnCollision(const Location& sneker1NextHeadLoc, const Location& s
 	return 0;
 }
 
+bool Snake::PlayerWon() const
+{
+	return nSegments == nSegmentsMax;
+}
+
 void Snake::Segment::InitHead(const Location& in_loc, const Color headColor)
 {
 	loc = in_loc;

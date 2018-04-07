@@ -32,6 +32,7 @@ public:
 	bool IsInTile(const Location& target) const;
 	bool PlayerCollisionExceptHeadAndEnd(const Location& snekerNextHeadLoc) const;
 	int HeadOnCollision(const Location& sneker1NextHeadLoc, const Location& sneker2NextHeadLoc, const Snake& sneker2) const;
+	bool PlayerWon() const;
 private:
 	static constexpr Color headColor1 = { 255,0,0 };
 	static constexpr Color bodyColor1 = {0, 180, 0};

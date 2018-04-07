@@ -77,6 +77,7 @@ private:
 	bool enemyPhase2Triggered = false;
 	bool startSinglePlayerGame = false;
 	bool startMultiplayerGame = false;
+	bool singlePlayerWon = false;
 	bool player1GameOver = false;
 	bool player2GameOver = false;
 	bool interval1 = false;

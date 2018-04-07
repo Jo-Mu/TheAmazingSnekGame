@@ -81,7 +81,7 @@ void Game::ComposeFrame()
 
 void Game::PlaySinglePlayerGame(const float frameTime)
 {
-	if (!player1GameOver)
+	if (!player1GameOver && !singlePlayerWon)
 	{
 		SinglePlayerMovement();
 		snekMoveTimer += frameTime;
@@ -120,10 +120,15 @@ void Game::PlaySinglePlayerGame(const float frameTime)
 
 			else
 			{
-				if (eating)
+				if (!player1GameOver && eating)
 				{
 					sneker1.Grow();
 					goal.Respawn(rng, brd, sneker1);
+
+					if(sneker1.PlayerWon())
+					{
+						singlePlayerWon = true;
+					}
 				}
 
 				sneker1.MoveBy(delta_loc1);
@@ -171,8 +176,14 @@ void Game::DrawSinglePlayerGame()
 		obstacles.Draw(brd);
 		sneker1.Draw(brd);
 	}
+	else if(singlePlayerWon)
+	{
+		brd.DrawBorder(Colors::Blue);
+		sneker1.Draw(brd);
+	}
 	else
 	{
+		brd.DrawBorder(Colors::Blue);
 		sprites.DrawGameOver(350, 275, gfx);
 	}
 }
@@ -245,12 +256,20 @@ void Game::PlayMultiplayerGame(const float frameTime)
 				{
 					sneker1.Grow();
 					goal.Respawn(rng, brd, sneker1, sneker2);
+					if(sneker1.PlayerWon())
+					{
+						player2GameOver = true;
+					}
 				}
 
 				if (eating2)
 				{
 					sneker2.Grow();
 					goal.Respawn(rng, brd, sneker1, sneker2);
+					if(sneker2.PlayerWon())
+					{
+						player1GameOver = true;
+					}
 				}
 
 				sneker1.MoveBy(delta_loc1);
@@ -303,17 +322,20 @@ void Game::DrawMultiplayerGame()
 	}
 	else if(player1GameOver && player2GameOver)
 	{
+		brd.DrawBorder(Colors::Blue);
 		sprites.DrawGameOver(350, 275, gfx);
 		sneker1.Draw(brd);
 		sneker2.Draw(brd);
 	}
 	else if(player1GameOver)
 	{
+		brd.DrawBorder(Colors::Blue);
 		sprites.DrawGameOver(350, 275, gfx);
 		sneker2.Draw(brd);
 	}
 	else
 	{
+		brd.DrawBorder(Colors::Blue);
 		sprites.DrawGameOver(350, 275, gfx);
 		sneker1.Draw(brd);
 	}
